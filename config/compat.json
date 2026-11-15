@@ -1,16 +1,28 @@
 {
   "minimumRelease": "R2024a",
   "banned": {
-    "R2024b": ["mustBeRow", "mustBeColumn", "mustBeMatrix"],
-    "R2025a": ["metafunction"],
+    "R2024b": ["mustBeRow", "mustBeColumn", "mustBeMatrix", "isapprox", "sonify", "layoutcoords",
+               "createSymbolicLink", "isSymbolicLink", "violinplot", "compassplot", "constantplane"],
+    "R2025a": ["mustBeBetween", "allbetween", "numunique", "allunique", "colormaplist", "nebula",
+               "matlabProcessID", "filePermissions", "uiprintdlg", "uiexportdlg"],
     "R2025b": [],
-    "R2026a": [],
-    "R2026b": []
+    "R2026a": ["metafunction", "mustBeSorted", "raincloudplot", "importSecrets", "renameSecret",
+               "removeSecretMetadata", "isfilePathInclusive", "pystringarray", "namespaceFunctions",
+               "namespaceClasses", "innerNamespaces"],
+    "R2026b": ["mustBeScalar", "mustBeVectorOrEmpty", "mustBeFilePathInclusive", "mustBeSymbolicLink",
+               "resolveFilePath", "uiselectiongroup", "mpmupdate"]
   },
   "alternatives": {
     "mustBeRow": "declare the size as (1,:) or call validateattributes(x, {'numeric'}, {'row'})",
     "mustBeColumn": "declare the size as (:,1) or call validateattributes(x, {'numeric'}, {'column'})",
     "mustBeMatrix": "declare the size as (:,:) or call validateattributes(x, {'numeric'}, {'2d'})",
+    "mustBeScalar": "declare the size as (1,1)",
+    "mustBeBetween": "use mustBeInRange(x, lower, upper)",
+    "mustBeSorted": "use assert(issorted(x), ...)",
+    "allbetween": "use all(x >= lower & x <= upper, 'all')",
+    "allunique": "use numel(unique(x)) == numel(x)",
+    "numunique": "use numel(unique(x))",
+    "isapprox": "use abs(a - b) <= tol",
     "metafunction": "use nargin/nargout, or parse the file with mtree"
   }
 }
