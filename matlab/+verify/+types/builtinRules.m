@@ -34,7 +34,7 @@ for c = ["numel" "length" "ndims" "nnz"]
     reg(c, @(a, n, ~) r("count", c, a, n), Inf);
 end
 reg(["isempty" "isscalar" "isvector" "isrow" "iscolumn" "isnumeric" "ischar" "isstring" ...
-    "islogical" "iscell" "isstruct" "isfloat" "isinteger" "isreal"], scalarOf("logical"), 1);
+     "islogical" "iscell" "isstruct" "isfloat" "isinteger" "isreal"], scalarOf("logical"), 1);
 reg(["isa" "isequal" "isfile" "isfolder" "strcmp" "strcmpi" "isfield"], scalarOf("logical"), Inf);
 reg("exist", scalarOf("double"), 2);
 reg("string", @(a, n, ~) r("toString", "", a, n), 1);

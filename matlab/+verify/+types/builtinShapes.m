@@ -16,8 +16,8 @@ end
 persistent rules
 if isempty(rules)
     rules = struct("fill", @fillShape, "size", @sizeOf, "count", @countOf, "toString", @toString, ...
-        "toChar", @toChar, "cast", @castTo, "reduce", @reduce, "same", @same, "text", @textOf, ...
-        "match", @match, "reshape", @reshapeOf, "loose", @loose, "split", @splitOf);
+                   "toChar", @toChar, "cast", @castTo, "reduce", @reduce, "same", @same, "text", @textOf, ...
+                   "match", @match, "reshape", @reshapeOf, "loose", @loose, "split", @splitOf);
 end
 mk = @verify.types.make;
 if isempty(args)
@@ -221,26 +221,50 @@ arguments (Output)
     outs (1,:) cell
 end
 x = args{1};
-cls = verify.types.arithClass(x.cls, "double", "MINUS");
-if any(name == ["any" "all"])
-    cls = "logical";
-elseif any(name == ["max" "min"]) && x.cls ~= "char" && x.cls ~= "logical"
-    cls = x.cls;
-end
 if any(name == ["max" "min"]) && numel(args) == 2
     outs = {verify.types.make(verify.types.arithClass(x.cls, args{2}.cls, "MINUS"), ...
-        verify.types.broadcast(x.dims, args{2}.dims))};
+                              verify.types.broadcast(x.dims, args{2}.dims))};
     return
 end
-dims = strings(1, 0);
-if name == "cumsum" || numel(args) > 1
-    dims = repmat(x.dims, 1, name == "cumsum");
-elseif numel(x.dims) == 2 && any(x.dims == "1")
-    dims = ["1" "1"];
-elseif ~isempty(x.dims) && ~isnan(str2double(x.dims(1)))
-    dims = ["1" x.dims(2:end)];
+dims = reduceDims(name, x.dims, numel(args));
+outs = {verify.types.make(reduceClass(name, x.cls), dims), verify.types.make("double", dims)};
 end
-outs = {verify.types.make(cls, dims), verify.types.make("double", dims)};
+
+function cls = reduceClass(name, inCls)
+arguments (Input)
+    name (1,1) string
+    inCls (1,1) string
+end
+arguments (Output)
+    cls (1,1) string
+end
+cls = verify.types.arithClass(inCls, "double", "MINUS");
+if any(name == ["any" "all"])
+    cls = "logical";
+elseif any(name == ["max" "min"]) && ~any(inCls == ["char" "logical"])
+    cls = inCls;
+end
+end
+
+function dims = reduceDims(name, inDims, nArgs)
+arguments (Input)
+    name (1,1) string
+    inDims (1,:) string
+    nArgs (1,1) double
+end
+arguments (Output)
+    dims (1,:) string
+end
+dims = strings(1, 0);
+if name == "cumsum"
+    dims = inDims;
+elseif nArgs > 1
+    return
+elseif numel(inDims) == 2 && any(inDims == "1")
+    dims = ["1" "1"];
+elseif ~isempty(inDims) && ~isnan(str2double(inDims(1)))
+    dims = ["1" inDims(2:end)];
+end
 end
 
 function outs = same(name, args, ~, ~)

@@ -47,7 +47,7 @@ e = s.Arg;
 if iskind(e, "EQUALS")
     state = verify.types.assign(e, state, ctx);
 else
-    [~, state] = verify.types.exprType(e, state, ctx);
+    [~, state] = verify.types.evaluate("expr", e, state, ctx);
 end
 end
 
@@ -67,7 +67,7 @@ clauses = verify.mtree.items(s.Arg);
 for k = 1:numel(clauses)
     c = clauses{k};
     hasElse = hasElse || iskind(c, "ELSE");
-    [~, state] = verify.types.exprType(c.Left, state, ctx);
+    [~, state] = verify.types.evaluate("expr", c.Left, state, ctx);
     state.env = entry;
     state = verify.types.walk(c.Body, state, ctx);
     envs{end + 1} = state.env; %#ok<AGROW>
@@ -87,7 +87,8 @@ end
 arguments (Output)
     state (1,1) struct
 end
-[v, state] = verify.types.exprType(s.Vector, state, ctx);
+[v, state] = verify.types.evaluate("expr", s.Vector, state, ctx);
+v = v{1};
 loopVar = verify.types.make();
 if numel(v.dims) == 2 && v.dims(1) == "1"
     loopVar = verify.types.make(v.cls, ["1" "1"]);
@@ -111,7 +112,7 @@ end
 arguments (Output)
     state (1,1) struct
 end
-[~, state] = verify.types.exprType(s.Left, state, ctx);
+[~, state] = verify.types.evaluate("expr", s.Left, state, ctx);
 entry = state.env;
 state = verify.types.walk(s.Body, state, ctx);
 state.env = verify.types.joinEnvs({entry, state.env});
@@ -126,7 +127,7 @@ end
 arguments (Output)
     state (1,1) struct
 end
-[~, state] = verify.types.exprType(s.Left, state, ctx);
+[~, state] = verify.types.evaluate("expr", s.Left, state, ctx);
 entry = state.env;
 envs = {};
 hasOtherwise = false;
@@ -134,7 +135,7 @@ cases = verify.mtree.items(s.Body);
 for k = 1:numel(cases)
     c = cases{k};
     hasOtherwise = hasOtherwise || iskind(c, "OTHERWISE");
-    [~, state] = verify.types.exprType(c.Left, state, ctx);
+    [~, state] = verify.types.evaluate("expr", c.Left, state, ctx);
     state.env = entry;
     state = verify.types.walk(c.Body, state, ctx);
     envs{end + 1} = state.env; %#ok<AGROW>

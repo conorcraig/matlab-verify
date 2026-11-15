@@ -12,5 +12,5 @@ arguments (Output)
     d (1,1) struct
 end
 d = struct("name", name, "field", "", "cls", cls, "dims", dims, "hasSize", ~isempty(dims), ...
-    "validators", strings(1, 0), "hasDefault", false, "repeating", false, "line", 0, "column", 0);
+           "validators", strings(1, 0), "hasDefault", false, "repeating", false, "line", 0, "column", 0);
 end

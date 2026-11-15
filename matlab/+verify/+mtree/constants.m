@@ -17,7 +17,7 @@ for k = 1:numel(blocks)
         n = nameNode(props{jj});
         if ~isnull(n)
             out(end + 1, 1) = struct("name", verify.mtree.nodeText(n), ...
-                "line", lineno(n), "column", charno(n)); %#ok<AGROW>
+                                     "line", lineno(n), "column", charno(n)); %#ok<AGROW>
         end
     end
 end

@@ -28,15 +28,15 @@ if isempty(d) || isempty(a)
 end
 %       actual: dbl sgl lgc chr str cel str int fh
 accepts = [ ...
-    1 1 1 1 1 0 0 1 0   % double
-    1 1 1 1 0 0 0 1 0   % single
-    1 1 1 1 0 0 0 1 0   % logical
-    1 1 0 1 1 2 0 1 1   % char   (cell: only cellstr converts)
-    1 1 1 1 1 2 0 1 0   % string (cell: only cellstr converts)
-    0 0 0 0 0 1 0 0 0   % cell
-    0 0 0 0 0 0 1 0 0   % struct
-    1 1 1 1 0 0 0 1 0   % intN/uintN
-    0 0 0 0 0 0 0 0 1]; % function_handle
+           1 1 1 1 1 0 0 1 0   % double
+           1 1 1 1 0 0 0 1 0   % single
+           1 1 1 1 0 0 0 1 0   % logical
+           1 1 0 1 1 2 0 1 1   % char   (cell: only cellstr converts)
+           1 1 1 1 1 2 0 1 0   % string (cell: only cellstr converts)
+           0 0 0 0 0 1 0 0 0   % cell
+           0 0 0 0 0 0 1 0 0   % struct
+           1 1 1 1 0 0 0 1 0   % intN/uintN
+           0 0 0 0 0 0 0 0 1]; % function_handle
 switch accepts(d, a)
     case 1
         status = "ok";

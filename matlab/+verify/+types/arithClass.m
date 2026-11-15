@@ -25,18 +25,28 @@ if ~all(ismember([a b], [ints "double" "single" "char" "logical"]))
     return
 end
 isInt = ismember([a b], ints);
-if all(isInt)
-    if a == b
-        cls = a;
-    end
-elseif any(isInt)
-    cls = a;
-    if ~isInt(1)
-        cls = b;
-    end
+if any(isInt)
+    cls = integerResult([a b], isInt);
 elseif any([a b] == "single")
     cls = "single";
 else
     cls = "double";
+end
+end
+
+function cls = integerResult(pair, isInt)
+%INTEGERRESULT intN op intN keeps intN; intN op intM is an error (unknown); intN op other is intN.
+arguments (Input)
+    pair (1,2) string
+    isInt (1,2) logical
+end
+arguments (Output)
+    cls (1,1) string
+end
+cls = "";
+if ~all(isInt)
+    cls = pair(isInt);
+elseif pair(1) == pair(2)
+    cls = pair(1);
 end
 end

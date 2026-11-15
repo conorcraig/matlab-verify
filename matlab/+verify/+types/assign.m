@@ -41,11 +41,12 @@ elseif n > 1
     callee = verify.types.dottedName(rhs);
 end
 if callee ~= "" && ~isfield(state.env, extractBefore(callee + ".", "."))
-    [outs, state] = verify.types.callType(callee, args, rhs, n, state, ctx);
+    call = struct("name", callee, "args", {args}, "nout", n);
+    [outs, state] = verify.types.evaluate("call", rhs, state, ctx, call);
     return
 end
-[t, state] = verify.types.exprType(rhs, state, ctx);
-outs = [{t} repmat({verify.types.make()}, 1, n - 1)];
+[t, state] = verify.types.evaluate("expr", rhs, state, ctx);
+outs = [t repmat({verify.types.make()}, 1, n - 1)];
 end
 
 function state = bind(target, t, state, ctx)
@@ -65,7 +66,7 @@ end
 base = target;
 while ~isnull(base) && ~iskind(base, "ID")
     if ~iskind(base, "DOT")
-        [~, state] = verify.types.exprList(base.Right, state, ctx);
+        [~, state] = verify.types.evaluate("list", base.Right, state, ctx);
     end
     base = base.Left;
 end

@@ -16,25 +16,51 @@ status = "unknown";
 if isempty(declared) || isempty(actual)
     return
 end
-conc = @(d) ~isnan(str2double(d)) & d ~= ":";
-if all(conc(actual)) && all(actual == "1")
+if all(actual == "1")
     status = "ok";
-    return
-end
-if isVector(declared) && isVector(actual)
-    dl = declared(declared ~= "1");
-    al = actual(actual ~= "1");
-    if conc(dl) && conc(al) && dl ~= al
-        status = "wrongSize";
-    else
-        status = "ok";
-    end
-    return
-end
-if nnz(conc(actual) & actual ~= "1") > numel(declared)
+elseif isVector(declared) && isVector(actual)
+    status = vectorStatus(declared(declared ~= "1"), actual(actual ~= "1"));
+elseif nnz(concrete(actual) & actual ~= "1") > numel(declared)
     status = "wrongRank";
-    return
+else
+    status = perDimension(declared, actual);
 end
+end
+
+function tf = concrete(d)
+arguments (Input)
+    d (1,:) string
+end
+arguments (Output)
+    tf (1,:) logical
+end
+tf = ~isnan(str2double(d)) & d ~= ":";
+end
+
+function status = vectorStatus(declaredLength, actualLength)
+arguments (Input)
+    declaredLength (1,1) string
+    actualLength (1,1) string
+end
+arguments (Output)
+    status (1,1) string
+end
+status = "ok";
+if concrete(declaredLength) && concrete(actualLength) && declaredLength ~= actualLength
+    status = "wrongSize";
+end
+end
+
+function status = perDimension(declared, actual)
+arguments (Input)
+    declared (1,:) string
+    actual (1,:) string
+end
+arguments (Output)
+    status (1,1) string
+end
+status = "unknown";
+conc = @concrete;
 n = max(numel(declared), numel(actual));
 d = [declared repmat("1", 1, n - numel(declared))];
 a = [actual repmat("1", 1, n - numel(actual))];

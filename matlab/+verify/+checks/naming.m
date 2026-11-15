@@ -35,8 +35,8 @@ arguments (Output)
 end
 camel = "^[a-z][a-zA-Z0-9]*$";
 opts = struct("functionPattern", camel, "variablePattern", camel, ...
-    "classPattern", "^[A-Z][a-zA-Z0-9]*$", "constantPattern", "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$", ...
-    "shadowing", true, "fileName", true, "allow", ["varargin" "varargout" "ans"]);
+              "classPattern", "^[A-Z][a-zA-Z0-9]*$", "constantPattern", "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$", ...
+              "shadowing", true, "fileName", true, "allow", ["varargin" "varargout" "ans"]);
 if ~isfield(cfg, "naming")
     return
 end
@@ -65,7 +65,7 @@ for k = 1:numel(fns)
     vars = verify.mtree.variables(fns(k).node);
     for jj = 1:numel(vars)
         issues = [issues; nameIssues(file, vars(jj), "Variable", "variablePattern", ...
-            " in '" + fns(k).name + "'", opts)]; %#ok<AGROW>
+                                     " in '" + fns(k).name + "'", opts)]; %#ok<AGROW>
     end
 end
 end
@@ -92,9 +92,9 @@ end
 if ~opts.fileName || declared == "" || declared == string(base)
     return
 end
-issues = verify.issue(file, [1 1], "error", "naming", "fileName", sprintf( ...
-    "File '%s%s' defines %s '%s'. Rename the file to '%s%s' or the %s to '%s' so MATLAB resolves it.", ...
-    base, ext, kindLabel, declared, declared, ext, kindLabel, base));
+msg = sprintf("File '%s%s' defines %s '%s'. Rename the file to '%s%s' or the %s to '%s' " + ...
+              "so MATLAB resolves it.", base, ext, kindLabel, declared, declared, ext, kindLabel, base);
+issues = verify.issue(file, [1 1], "error", "naming", "fileName", msg);
 end
 
 function issues = classIssues(file, tree, opts)
@@ -117,7 +117,7 @@ noShadow = opts;
 noShadow.shadowing = false;
 for k = 1:numel(consts)
     issues = [issues; nameIssues(file, consts(k), "Constant property", "constantPattern", "", ...
-        noShadow)]; %#ok<AGROW>
+                                 noShadow)]; %#ok<AGROW>
 end
 end
 
@@ -162,14 +162,14 @@ end
 rule = opts.(patternField);
 if isempty(regexp(name, rule, "once"))
     id = extractBefore(patternField, "Pattern") + "Name";
-    issues(end + 1, 1) = verify.issue(file, pos, "error", "naming", id, sprintf( ...
-        "%s '%s'%s does not match %s. Rename it to '%s' and update its uses.", ...
-        kindLabel, name, where, rule, suggest(name, patternField)));
+    msg = sprintf("%s '%s'%s does not match %s. Rename it to '%s' and update its uses.", ...
+                  kindLabel, name, where, rule, suggest(name, patternField));
+    issues(end + 1, 1) = verify.issue(file, pos, "error", "naming", id, msg);
 end
 if opts.shadowing && verify.mtree.shadowsBuiltin(name)
-    issues(end + 1, 1) = verify.issue(file, pos, "error", "naming", "shadowsBuiltin", sprintf( ...
-        "%s '%s'%s shadows the MATLAB function or class '%s' (%s). Rename it, e.g. '%sValue'.", ...
-        kindLabel, name, where, name, which(name), name));
+    msg = sprintf("%s '%s'%s shadows the MATLAB function or class '%s' (%s). Rename it, e.g. '%sValue'.", ...
+                  kindLabel, name, where, name, which(name), name);
+    issues(end + 1, 1) = verify.issue(file, pos, "error", "naming", "shadowsBuiltin", msg);
 end
 end
 

@@ -30,13 +30,13 @@ for k = 1:numel(units)
         continue
     end
     ctx = struct("file", units(k).file, "local", locals{k}, "global", shared, ...
-        "builtins", verify.types.builtinRules());
+                 "builtins", verify.types.builtinRules());
     [found, stats] = checkUnit(units(k), ctx, stats);
     issues = [issues; found]; %#ok<AGROW>
 end
 if showSummary(cfg)
     fprintf("types: %d call site(s) checked, %d unchecked (unresolved callee or known gap), " + ...
-        "%d unparseable declaration(s)\n", stats.checked, stats.unchecked, stats.unparseable);
+            "%d unparseable declaration(s)\n", stats.checked, stats.unchecked, stats.unparseable);
 end
 end
 

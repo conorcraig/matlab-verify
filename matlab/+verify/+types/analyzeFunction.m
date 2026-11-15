@@ -21,7 +21,7 @@ for k = 1:numel(sig.outNames)
     if isscalar(d) && isfield(state.env, name)
         label = sprintf("Output '%s' of '%s'", name, sig.name);
         state.issues = [state.issues; verify.types.compareValue(d, state.env.(name), label, ...
-            ctx.file, [d.line d.column])];
+                                                                ctx.file, [d.line d.column])];
     end
 end
 end

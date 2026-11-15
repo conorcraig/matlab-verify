@@ -20,9 +20,9 @@ call.nvNames = legacyNameValue(call, numel(posNames), ~isempty(nvStruct));
 isPos = call.nvNames == "";
 nPos = nnz(isPos);
 if nPos > numel(posNames) && ~isOpen
-    issues(end + 1, 1) = verify.issue(file, pos, "error", "types", "tooManyInputs", sprintf( ...
-        "Call to '%s' passes %d positional input(s) but it accepts at most %d (%s). Remove the extra argument(s).", ...
-        sig.name, nPos, numel(posNames), strjoin(posNames, ", ")));
+    msg = sprintf("Call to '%s' passes %d positional input(s) but it accepts at most %d (%s). " + ...
+                  "Remove the extra argument(s).", sig.name, nPos, numel(posNames), strjoin(posNames, ", "));
+    issues(end + 1, 1) = verify.issue(file, pos, "error", "types", "tooManyInputs", msg);
 end
 if ~sig.hasInBlock
     return
@@ -89,10 +89,10 @@ for k = 1:numel(posNames)
 end
 if nPos < required && ~expands
     absent = posNames(nPos + 1:required);
-    issues = verify.issue(file, [call.line call.column], "error", "types", "missingInput", sprintf( ...
-        "Call to '%s' passes %d input(s) but needs %d; missing %s. Pass a value for each, " + ...
-        "or give them defaults in the arguments block of '%s'.", ...
-        sig.name, nPos, required, strjoin("'" + absent + "'", ", "), sig.name));
+    msg = sprintf("Call to '%s' passes %d input(s) but needs %d; missing %s. Pass a value for each, " + ...
+                  "or give them defaults in the arguments block of '%s'.", ...
+                  sig.name, nPos, required, strjoin("'" + absent + "'", ", "), sig.name);
+    issues = verify.issue(file, [call.line call.column], "error", "types", "missingInput", msg);
 end
 end
 
@@ -117,8 +117,8 @@ for jj = find(call.nvNames ~= "" & ~endsWith(call.nvNames, "#value"))
         if ~isempty(nvStruct)
             hint = "Use one of: " + strjoin(nvFields, ", ");
         end
-        issues(end + 1, 1) = verify.issue(file, pos, "error", "types", "unknownNameValue", ...
-            sprintf("'%s' is not a name-value argument of '%s'. %s.", name, sig.name, hint)); %#ok<AGROW>
+        msg = sprintf("'%s' is not a name-value argument of '%s'. %s.", name, sig.name, hint);
+        issues(end + 1, 1) = verify.issue(file, pos, "error", "types", "unknownNameValue", msg); %#ok<AGROW>
         continue
     end
     value = call.types{min(jj + double(~iskind(call.nodes{jj}, "NAMEVALUE")), numel(call.types))};

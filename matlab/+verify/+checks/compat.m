@@ -51,7 +51,7 @@ if name ~= "" && isfield(spec.alternatives, name)
     advice = advice + ": " + spec.alternatives.(name);
 end
 msg = sprintf("'%s' was added in %s but the minimum supported release is %s. %s.", ...
-                  name, release, spec.minimumRelease, advice);
+              name, release, spec.minimumRelease, advice);
 end
 
 function name = identifierAt(file, lineNo, column)
