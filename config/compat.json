@@ -1,0 +1,16 @@
+{
+  "minimumRelease": "R2024a",
+  "banned": {
+    "R2024b": ["mustBeRow", "mustBeColumn", "mustBeMatrix"],
+    "R2025a": ["metafunction"],
+    "R2025b": [],
+    "R2026a": [],
+    "R2026b": []
+  },
+  "alternatives": {
+    "mustBeRow": "declare the size as (1,:) or call validateattributes(x, {'numeric'}, {'row'})",
+    "mustBeColumn": "declare the size as (:,1) or call validateattributes(x, {'numeric'}, {'column'})",
+    "mustBeMatrix": "declare the size as (:,:) or call validateattributes(x, {'numeric'}, {'2d'})",
+    "metafunction": "use nargin/nargout, or parse the file with mtree"
+  }
+}
