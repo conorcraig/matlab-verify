@@ -29,9 +29,9 @@ for k = 1:numel(files)
     target = target(isLocal & target ~= k);
     edges = [edges; repmat(k, numel(target), 1), target(:)]; %#ok<AGROW>
     for name = reshape(setdiff(string({products.Name}), allowed), 1, [])
-        message = "Requires '" + name + "', which is not in deps.allowedProducts (" + strjoin(allowed, ", ") + ...
+        msg = "Requires '" + name + "', which is not in deps.allowedProducts (" + strjoin(allowed, ", ") + ...
             "). Use base MATLAB functions instead, or add the product to config/verify.json.";
-        issues(end + 1, 1) = verify.issue(files(k), [1 1], "error", "deps", "product", message); %#ok<AGROW>
+        issues(end + 1, 1) = verify.issue(files(k), [1 1], "error", "deps", "product", msg); %#ok<AGROW>
     end
 end
 issues = [issues; cycleIssues(files, edges); unresolvedIssues(files)];
@@ -46,18 +46,18 @@ arguments (Output)
     issues (:,1) struct
 end
 issues = verify.emptyIssues();
-graph = digraph(edges(:, 1), edges(:, 2), [], numel(files));
-bins = conncomp(graph);
+depGraph = digraph(edges(:, 1), edges(:, 2), [], numel(files));
+bins = conncomp(depGraph);
 for b = unique(bins)
     members = find(bins == b);
     if numel(members) < 2
         continue
     end
     loop = strjoin(files(members), " -> ") + " -> " + files(members(1));
-    message = "File is in a dependency cycle (" + loop + "). Break it by moving the shared code " + ...
+    msg = "File is in a dependency cycle (" + loop + "). Break it by moving the shared code " + ...
         "into a separate function that both files call.";
     for m = members
-        issues(end + 1, 1) = verify.issue(files(m), [1 1], "error", "deps", "cycle", message); %#ok<AGROW>
+        issues(end + 1, 1) = verify.issue(files(m), [1 1], "error", "deps", "cycle", msg); %#ok<AGROW>
     end
 end
 end
@@ -80,14 +80,14 @@ for k = 1:numel(files)
     calls = Left(mtfind(trees{k}, "Kind", "CALL"));
     calls = mtfind(calls, "Kind", "ID");
     names = string(strings(calls));
-    lines = lineno(calls);
+    lineNos = lineno(calls);
     cols = charno(calls);
     for c = 1:numel(names)
         if ~ismember(names(c), defined) && isempty(which(names(c), "-all"))
-            message = "Call to '" + names(c) + "' does not resolve to any function on the path or in the " + ...
+            msg = "Call to '" + names(c) + "' does not resolve to any function on the path or in the " + ...
                 "checked files. Fix the name, add the defining file, or add its folder to the path.";
-            issues(end + 1, 1) = verify.issue(files(k), [lines(c) cols(c)], "error", "deps", "unresolved", ...
-                                              message); %#ok<AGROW>
+            issues(end + 1, 1) = verify.issue(files(k), [lineNos(c) cols(c)], "error", "deps", "unresolved", ...
+                                              msg); %#ok<AGROW>
         end
     end
 end

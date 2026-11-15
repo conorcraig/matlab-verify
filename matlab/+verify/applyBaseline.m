@@ -1,4 +1,4 @@
-function [remaining, stale, nAccepted] = applyBaseline(check, issues, root, mode)
+function [remaining, stale, nAccepted] = applyBaseline(check, issues, root, runMode)
 %APPLYBASELINE Split issues into accepted-by-baseline and remaining.
 %   Baseline lines are "file: severity: [check/id] message" (no line or
 %   column), sorted. Matching is a multiset: each line accepts one issue.
@@ -9,7 +9,7 @@ arguments
     check (1,1) string
     issues (:,1) struct
     root (1,1) string
-    mode (1,1) string = "check"
+    runMode (1,1) string = "check"
 end
 arguments (Output)
     remaining (:,1) struct
@@ -34,13 +34,13 @@ end
 remaining = issues(keep);
 stale = base(~used);
 nAccepted = nnz(used);
-if mode == "update" && ~isempty(stale)
+if runMode == "update" && ~isempty(stale)
     kept = sort(base(used));
     writelines(kept, file);
     fprintf("baseline %s: removed %d fixed entries, %d remain\n", verify.relPath(file), numel(stale), numel(kept));
     stale = strings(0, 1);
 end
-if mode == "update" && ~isempty(remaining)
+if runMode == "update" && ~isempty(remaining)
     fprintf("baseline %s: refusing to add %d new issue(s); fix them instead\n", ...
             verify.relPath(file), numel(remaining));
 end

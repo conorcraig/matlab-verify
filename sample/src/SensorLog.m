@@ -41,16 +41,16 @@ classdef SensorLog < handle
             n = numel(obj.Readings);
         end
 
-        function summary = summarize(obj, window)
+        function stats = summarize(obj, window)
             arguments
                 obj (1,1) SensorLog
                 window (1,1) double {mustBeInteger, mustBePositive} = 3
             end
             arguments (Output)
-                summary (1,1) struct
+                stats (1,1) struct
             end
-            summary = summarizeSignal(clampValues(obj.Readings, -1e6, 1e6), Window = window);
-            summary.name = obj.Name;
+            stats = summarizeSignal(clampValues(obj.Readings, -1e6, 1e6), Window = window);
+            stats.name = obj.Name;
         end
 
     end

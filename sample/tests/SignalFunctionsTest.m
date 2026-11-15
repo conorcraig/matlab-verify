@@ -26,8 +26,8 @@ classdef (TestTags = {'fast'}) SignalFunctionsTest < matlab.unittest.TestCase
         end
 
         function resampleUniformInterpolates(testCase)
-            [times, values] = resampleUniform([0; 2], [0; 4], 1);
-            testCase.verifyEqual(times, [0; 1; 2]);
+            [sampleTimes, values] = resampleUniform([0; 2], [0; 4], 1);
+            testCase.verifyEqual(sampleTimes, [0; 1; 2]);
             testCase.verifyEqual(values, [0; 2; 4]);
         end
 

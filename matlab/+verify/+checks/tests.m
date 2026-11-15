@@ -28,21 +28,21 @@ runner.addPlugin(matlab.unittest.plugins.XMLPlugin.producingJUnitFormat(junit));
 runner.addPlugin(matlab.unittest.plugins.DiagnosticsRecordingPlugin);
 results = runner.run(suite);
 for k = find([results.Failed])
-    [file, line, detail] = failureDetail(results(k), testFiles);
-    message = "Test '" + results(k).Name + "' failed: " + detail + ...
+    [file, lineNo, detail] = failureDetail(results(k), testFiles);
+    msg = "Test '" + results(k).Name + "' failed: " + detail + ...
         " Fix the code under test or the test; details in " + verify.relPath(junit) + ".";
-    issues(end + 1, 1) = verify.issue(file, [line 1], "error", "tests", "failed", message); %#ok<AGROW>
+    issues(end + 1, 1) = verify.issue(file, [lineNo 1], "error", "tests", "failed", msg); %#ok<AGROW>
 end
 end
 
-function [file, line, detail] = failureDetail(result, testFiles)
+function [file, lineNo, detail] = failureDetail(result, testFiles)
 arguments
     result (1,1) matlab.unittest.TestResult
     testFiles (:,1) string
 end
 arguments (Output)
     file (1,1) string
-    line (1,1) double
+    lineNo (1,1) double
     detail (1,1) string
 end
 className = extractBefore(string(result.Name), "/");
@@ -51,7 +51,7 @@ file = className + ".m";
 if ~isempty(match)
     file = match(1);
 end
-line = 0;
+lineNo = 0;
 detail = "";
 records = result.Details.DiagnosticRecord;
 if isempty(records)
@@ -61,7 +61,7 @@ record = records(1);
 stack = record.Stack;
 for s = 1:numel(stack)
     if endsWith(string(stack(s).file), className + ".m")
-        line = stack(s).line;
+        lineNo = stack(s).line;
         break
     end
 end

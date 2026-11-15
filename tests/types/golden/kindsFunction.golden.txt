@@ -1,0 +1,176 @@
+  1  *<root>:  FUNCTION:   1/01
+  6     *Fname:  ID:   1/21  (kindsFunction)
+  7     *Ins:  ID:   1/35  (x)
+  8     >Next:  ID:   1/38  (opts)
+  3     *Outs:  ID:   1/11  (out)
+  4     >Next:  ID:   1/16  (n)
+  9     *Arguments:  ARGUMENTS:   2/01
+ 10        *Attr:  ATTRIBUTES:   2/11
+ 11           *Arg:  ATTR:   2/12
+ 12              *Left:  ID:   2/12  (Input)
+ 13        *Body:  ARGUMENT:   3/59
+ 14           *ArgumentValidation:  PROPTYPEDECL:   3/05
+ 16              *VarName:  ID:   3/05  (x)
+ 19              *VarType:  ID:   3/13  (double)
+ 21              *VarDimensions:  INT:   3/08  (1)
+ 22              >Next:  COLON:   3/10
+ 24              *VarValidators:  LP:   3/28
+ 25                 *Left:  ID:   3/21  (mustBeA)
+ 26                 *Right:  ID:   3/29  (x)
+ 27                 >Next:  STRING:   3/32  ("double")
+ 28              >Next:  ID:   3/43  (mustBePositive)
+ 29           *ArgumentInitialization:  LB:   3/61
+ 30              *Arg:  ROW:   3/62
+ 31                 *Arg:  INT:   3/62  (1)
+ 32                 >Next:  INT:   3/64  (2)
+ 33        >Next:  ARGUMENT:   4/28
+ 34           *ArgumentValidation:  PROPTYPEDECL:   4/05
+ 36              *VarName:  ID:   4/05  (opts)
+ 38              *VarNamedField:  FIELD:   4/10  (Name)
+ 40              *VarType:  ID:   4/21  (string)
+ 42              *VarDimensions:  INT:   4/16  (1)
+ 43              >Next:  INT:   4/18  (1)
+ 45           *ArgumentInitialization:  STRING:   4/30  ("a")
+ 46     >Next:  ARGUMENTS:   6/01
+ 47        *Attr:  ATTRIBUTES:   6/11
+ 48           *Arg:  ATTR:   6/12
+ 49              *Left:  ID:   6/12  (Output)
+ 50        *Body:  ARGUMENT:   7/05
+ 51           *ArgumentValidation:  PROPTYPEDECL:   7/05
+ 53              *VarName:  ID:   7/05  (out)
+ 56              *VarType:  ID:   7/15  (double)
+ 58              *VarDimensions:  INT:   7/10  (1)
+ 59              >Next:  INT:   7/12  (1)
+ 61        >Next:  ARGUMENT:   8/05
+ 62           *ArgumentValidation:  PROPTYPEDECL:   8/05
+ 64              *VarName:  ID:   8/05  (n)
+ 67              *VarType:  ID:   8/13  (char)
+ 69              *VarDimensions:  INT:   8/08  (1)
+ 70              >Next:  COLON:   8/10
+ 72     *Body:  EXPR:  10/03
+ 73        *Arg:  EQUALS:  10/03
+ 74           *Left:  ID:  10/01  (z)
+ 75           *Right:  CALL:  10/10
+ 76              *Left:  ID:  10/05  (zeros)
+ 77              *Right:  INT:  10/11  (3)
+ 78              >Next:  CALL:  10/19
+ 79                 *Left:  ID:  10/14  (numel)
+ 80                 *Right:  ID:  10/20  (x)
+ 81     >Next:  EXPR:  11/03
+ 82        *Arg:  EQUALS:  11/03
+ 83           *Left:  ID:  11/01  (w)
+ 84           *Right:  CALL:  11/13
+ 85              *Left:  ID:  11/05  (helperFn)
+ 86              *Right:  TRANS:  11/15
+ 87                 *Arg:  ID:  11/14  (z)
+ 88              >Next:  STRING:  11/18  ("s")
+ 89              >Next:  NAMEVALUE:  11/28
+ 90                 *Left:  FIELD:  11/23  (Name)
+ 91                 *Right:  CHARVECTOR:  11/30  ('q')
+ 92     >Next:  EXPR:  12/08
+ 93        *Arg:  EQUALS:  12/08
+ 94           *Left:  LB:  12/01
+ 95              *Arg:  ID:  12/02  (r)
+ 96              >Next:  ID:  12/05  (c)
+ 97           *Right:  CALL:  12/14
+ 98              *Left:  ID:  12/10  (size)
+ 99              *Right:  ID:  12/15  (z)
+100     >Next:  IF:  13/01
+101        *Arg:  IFHEAD:  13/01
+102           *Left:  ANDAND:  13/10
+103              *Left:  LT:  13/06
+104                 *Left:  ID:  13/04  (r)
+105                 *Right:  INT:  13/08  (2)
+106              *Right:  GT:  13/15
+107                 *Left:  ID:  13/13  (c)
+108                 *Right:  INT:  13/17  (1)
+109           *Body:  PRINT:  14/09
+110              *Arg:  EQUALS:  14/09
+111                 *Left:  ID:  14/05  (out)
+112                 *Right:  UMINUS:  14/11
+113                    *Arg:  DOUBLE:  14/12  (1.5)
+114        >Next:  ELSEIF:  15/01
+115           *Left:  NOT:  15/08
+116              *Arg:  CALL:  15/16
+117                 *Left:  ID:  15/09  (isempty)
+118                 *Right:  ID:  15/17  (w)
+119           *Body:  EXPR:  16/09
+120              *Arg:  EQUALS:  16/09
+121                 *Left:  ID:  16/05  (out)
+122                 *Right:  PARENS:  16/11
+123                    *Arg:  MUL:  16/14
+124                       *Left:  ID:  16/12  (r)
+125                       *Right:  ID:  16/16  (c)
+126        >Next:  ELSE:  17/01
+127           *Body:  EXPR:  18/09
+128              *Arg:  EQUALS:  18/09
+129                 *Left:  ID:  18/05  (out)
+130                 *Right:  INT:  18/11  (0)
+131     >Next:  FOR:  20/01
+133        *Index:  ID:  20/05  (k)
+134        *Vector:  COLON:  20/12
+135           *Left:  COLON:  20/10
+136              *Left:  INT:  20/09  (1)
+137              *Right:  INT:  20/11  (2)
+138           *Right:  INT:  20/13  (5)
+139        *Body:  EXPR:  21/10
+140           *Arg:  EQUALS:  21/10
+141              *Left:  SUBSCR:  21/06
+142                 *Left:  ID:  21/05  (z)
+143                 *Right:  ID:  21/07  (k)
+144              *Right:  ID:  21/12  (k)
+145     >Next:  WHILE:  23/01
+146        *Left:  CALL:  23/07
+147           *Left:  ID:  23/07  (false)
+148        *Body:  BREAK:  24/05
+149     >Next:  SWITCH:  26/01
+150        *Left:  ID:  26/08  (c)
+151        *Body:  CASE:  27/05
+152           *Left:  INT:  27/10  (1)
+153           *Body:  EXPR:  28/13
+154              *Arg:  EQUALS:  28/13
+155                 *Left:  DOT:  28/10
+156                    *Left:  ID:  28/09  (s)
+157                    *Right:  FIELD:  28/11  (a)
+158                 *Right:  LC:  28/15
+159                    *Arg:  ROW:  28/16
+160                       *Arg:  INT:  28/16  (1)
+161                       >Next:  CHARVECTOR:  28/19  ('b')
+162           >Next:  EXPR:  29/16
+163              *Arg:  EQUALS:  29/16
+164                 *Left:  CELL:  29/12
+165                    *Left:  DOT:  29/10
+166                       *Left:  ID:  29/09  (s)
+167                       *Right:  FIELD:  29/11  (a)
+168                    *Right:  INT:  29/13  (2)
+169                 *Right:  INT:  29/18  (3)
+170        >Next:  OTHERWISE:  30/05
+171           *Body:  EXPR:  31/11
+172              *Arg:  EQUALS:  31/11
+173                 *Left:  ID:  31/09  (s)
+174                 *Right:  CALL:  31/19
+175                    *Left:  ID:  31/13  (struct)
+176     >Next:  TRY:  33/01
+177        *Try:  EXPR:  34/07
+178           *Arg:  EQUALS:  34/07
+179              *Left:  ID:  34/05  (f)
+180              *Right:  ANON:  34/09
+181                 *Left:  ANONID:  34/11  (t)
+182                 *Right:  PLUS:  34/16
+183                    *Left:  ANONID:  34/14  (t)
+184                    *Right:  INT:  34/18  (1)
+185        >Next:  EXPR:  35/07
+186           *Arg:  EQUALS:  35/07
+187              *Left:  ID:  35/05  (g)
+188              *Right:  AT:  35/09
+189                 *Arg:  ID:  35/10  (sin)
+191        *CatchID:  ID:  36/07  (err)
+192        *Catch:  GLOBAL:  37/05
+193           *Arg:  ID:  37/12  (G)
+194     >Next:  DCALL:  39/01
+195        *Left:  ID:  39/01  (hold)
+196        *Right:  CHARVECTOR:  39/06  (on)
+197     >Next:  EXPR:  40/03
+198        *Arg:  EQUALS:  40/03
+199           *Left:  ID:  40/01  (n)
+200           *Right:  CHARVECTOR:  40/05  ('x')

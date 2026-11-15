@@ -10,13 +10,13 @@ end
 arguments (Output)
     issues (:,1) struct
 end
-settings = cfg.lint;
+lintSettings = cfg.lint;
 limits = struct();
-limits.FCNLL = struct("limit", settings.maxFunctionLines, "hint", "Split the function into smaller helpers.");
-limits.MNCSN = struct("limit", settings.maxNesting, "hint", "Reduce nesting with early returns or a helper.");
-limits.LLMNC = struct("limit", settings.maxLineLength, "hint", "Wrap the line with ... continuation.");
-limits.FCNIL = struct("limit", settings.maxInputs, "hint", "Group related inputs into a struct or options.");
-limits.FCNOL = struct("limit", settings.maxOutputs, "hint", "Return a struct instead of many outputs.");
+limits.FCNLL = struct("limit", lintSettings.maxFunctionLines, "hint", "Split the function into smaller helpers.");
+limits.MNCSN = struct("limit", lintSettings.maxNesting, "hint", "Reduce nesting with early returns or a helper.");
+limits.LLMNC = struct("limit", lintSettings.maxLineLength, "hint", "Wrap the line with ... continuation.");
+limits.FCNIL = struct("limit", lintSettings.maxInputs, "hint", "Group related inputs into a struct or options.");
+limits.FCNOL = struct("limit", lintSettings.maxOutputs, "hint", "Return a struct instead of many outputs.");
 limitIds = string(fieldnames(limits));
 checks = struct();
 for id = limitIds'

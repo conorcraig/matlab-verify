@@ -22,9 +22,9 @@ for f = files'
             continue
         end
         id = string(found.CheckID(k));
-        message = strip(string(found.Description(k)) + " " + hint(id, string(found.Description(k))));
+        msg = strip(string(found.Description(k)) + " " + hint(id, string(found.Description(k))));
         issues(end + 1, 1) = verify.issue(f, [found.LineStart(k) found.ColumnStart(k)], ...
-                                          severity, check, id, message); %#ok<AGROW>
+                                          severity, check, id, msg); %#ok<AGROW>
     end
 end
 end

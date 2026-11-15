@@ -19,7 +19,21 @@ if isKey(cache, key)
 end
 w = string(which(key));
 shipped = startsWith(w, matlabroot) || startsWith(w, "built-in") || endsWith(w, "built-in method");
-tf = exist(key, "builtin") == 5 || ...
-    (any(exist(key, "file") == [2 3 6]) || exist(key, "class") == 8) && shipped;
+found = exist(key, "builtin") == 5 || any(exist(key, "file") == [2 3 6]) || exist(key, "class") == 8;
+tf = found && shipped && sameCase(w, key);
 cache(key) = tf;
+end
+
+function tf = sameCase(w, key)
+%SAMECASE exist/which ignore case on Windows; require the resolved name to match exactly.
+arguments (Input)
+    w (1,1) string
+    key (1,:) char
+end
+arguments (Output)
+    tf (1,1) logical
+end
+resolved = regexprep(w, "\)$", "");
+[~, base] = fileparts(resolved);
+tf = startsWith(w, key + " ") || string(base) == key;
 end

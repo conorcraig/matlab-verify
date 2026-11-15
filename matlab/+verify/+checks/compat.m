@@ -37,36 +37,36 @@ for k = 1:numel(found)
 end
 end
 
-function message = compatMessage(name, release, spec)
+function msg = compatMessage(name, release, spec)
 arguments
     name (1,1) string
     release (1,1) string
     spec (1,1) struct
 end
 arguments (Output)
-    message (1,1) string
+    msg (1,1) string
 end
 advice = "Replace it with code that works in " + spec.minimumRelease;
 if name ~= "" && isfield(spec.alternatives, name)
     advice = advice + ": " + spec.alternatives.(name);
 end
-message = sprintf("'%s' was added in %s but the minimum supported release is %s. %s.", ...
+msg = sprintf("'%s' was added in %s but the minimum supported release is %s. %s.", ...
                   name, release, spec.minimumRelease, advice);
 end
 
-function name = identifierAt(file, line, column)
+function name = identifierAt(file, lineNo, column)
 arguments
     file (1,1) string
-    line (1,1) double
+    lineNo (1,1) double
     column (1,1) double
 end
 arguments (Output)
     name (1,1) string
 end
 name = "";
-lines = readlines(verify.absPath(file));
-if line >= 1 && line <= numel(lines)
-    tok = regexp(extractAfter(lines(line), max(column - 1, 0)), "^[A-Za-z]\w*", "match", "once");
+srcLines = readlines(verify.absPath(file));
+if lineNo >= 1 && lineNo <= numel(srcLines)
+    tok = regexp(extractAfter(srcLines(lineNo), max(column - 1, 0)), "^[A-Za-z]\w*", "match", "once");
     if ~isempty(tok)
         name = string(tok);
     end

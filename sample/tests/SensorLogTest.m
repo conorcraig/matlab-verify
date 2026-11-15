@@ -19,10 +19,10 @@ classdef (TestTags = {'fast'}) SensorLogTest < matlab.unittest.TestCase
         function summarizeReportsPeaks(testCase)
             sensorLog = SensorLog("pump");
             sensorLog.addReadings([0; 0; 10; 0; 0; 0; 0]);
-            summary = sensorLog.summarize(1);
-            testCase.verifyEqual(summary.count, 7);
-            testCase.verifyEqual(summary.peaks, 3);
-            testCase.verifyEqual(summary.name, "pump");
+            stats = sensorLog.summarize(1);
+            testCase.verifyEqual(stats.count, 7);
+            testCase.verifyEqual(stats.peaks, 3);
+            testCase.verifyEqual(stats.name, "pump");
         end
 
     end

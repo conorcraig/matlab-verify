@@ -1,0 +1,69 @@
+  1  *<root>:  CLASSDEF:   1/01
+  3     *Cexpr:  LT:   1/21
+  4        *Left:  ID:   1/10  (KindsClass)
+  5        *Right:  ID:   1/23  (handle)
+  6     *Body:  PROPERTIES:   2/05
+  7        *Attr:  ATTRIBUTES:   2/16
+  8           *Arg:  ATTR:   2/17
+  9              *Left:  ID:   2/17  (Constant)
+ 10        *Body:  EQUALS:   3/15
+ 11           *Left:  ID:   3/09  (MAX_N)
+ 12           *Right:  INT:   3/17  (3)
+ 13     >Next:  PROPERTIES:   5/05
+ 14        *Body:  EQUALS:   6/28
+ 15           *Left:  PROPTYPEDECL:   6/09
+ 17              *VarName:  ID:   6/09  (Value)
+ 20              *VarType:  ID:   6/21  (double)
+ 22              *VarDimensions:  INT:   6/16  (1)
+ 23              >Next:  INT:   6/18  (1)
+ 25           *Right:  INT:   6/30  (0)
+ 26     >Next:  METHODS:   8/05
+ 27        *Attr:  ATTRIBUTES:   8/13
+ 28           *Arg:  ATTR:   8/14
+ 29              *Left:  ID:   8/14  (Abstract)
+ 30        *Body:  PROTO:   9/11
+ 34           *Fname:  ID:   9/13  (absMethod)
+ 35           *Ins:  ID:   9/23  (obj)
+ 36           >Next:  ID:   9/28  (x)
+ 32           *Outs:  ID:   9/09  (r)
+ 37     >Next:  METHODS:  11/05
+ 38        *Body:  FUNCTION:  12/09
+ 42           *Fname:  ID:  12/24  (KindsClass)
+ 43           *Ins:  ID:  12/35  (v)
+ 40           *Outs:  ID:  12/18  (obj)
+ 44           *Arguments:  ARGUMENTS:  13/13
+ 45              *Body:  ARGUMENT:  14/17
+ 46                 *ArgumentValidation:  PROPTYPEDECL:  14/17
+ 48                    *VarName:  ID:  14/17  (v)
+ 51                    *VarType:  ID:  14/25  (double)
+ 53                    *VarDimensions:  INT:  14/20  (1)
+ 54                    >Next:  INT:  14/22  (1)
+ 56           *Body:  EXPR:  16/23
+ 57              *Arg:  EQUALS:  16/23
+ 58                 *Left:  DOT:  16/16
+ 59                    *Left:  ID:  16/13  (obj)
+ 60                    *Right:  FIELD:  16/17  (Value)
+ 61                 *Right:  ID:  16/25  (v)
+ 62        >Next:  FUNCTION:  18/09
+ 65           *Fname:  ID:  18/18  (set.Value)
+ 66           *Ins:  ID:  18/28  (obj)
+ 67           >Next:  ID:  18/33  (v)
+ 68           *Body:  EXPR:  19/23
+ 69              *Arg:  EQUALS:  19/23
+ 70                 *Left:  DOT:  19/16
+ 71                    *Left:  ID:  19/13  (obj)
+ 72                    *Right:  FIELD:  19/17  (Value)
+ 73                 *Right:  ID:  19/25  (v)
+ 74     >Next:  METHODS:  22/05
+ 75        *Attr:  ATTRIBUTES:  22/13
+ 76           *Arg:  ATTR:  22/14
+ 77              *Left:  ID:  22/14  (Static)
+ 78        *Body:  FUNCTION:  23/09
+ 82           *Fname:  ID:  23/22  (make)
+ 80           *Outs:  ID:  23/18  (s)
+ 83           *Body:  EXPR:  24/15
+ 84              *Arg:  EQUALS:  24/15
+ 85                 *Left:  ID:  24/13  (s)
+ 86                 *Right:  LP:  24/27
+ 87                    *Left:  ID:  24/17  (KindsClass)
+ 88                    *Right:  INT:  24/28  (1)
