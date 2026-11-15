@@ -23,7 +23,7 @@ for f = files'
         end
         id = string(found.CheckID(k));
         message = strip(string(found.Description(k)) + " " + hint(id, string(found.Description(k))));
-        issues(end + 1, 1) = verify.issue(f, double(found.LineStart(k)), double(found.ColumnStart(k)), ...
+        issues(end + 1, 1) = verify.issue(f, [found.LineStart(k) found.ColumnStart(k)], ...
             severity, check, id, message); %#ok<AGROW>
     end
 end

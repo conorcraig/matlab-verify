@@ -13,14 +13,14 @@ end
 try
     raw = feval("verify.checks." + name, files, cfg);
 catch err
-    raw = verify.issue("matlab/+verify/+checks/" + name + ".m", 0, 0, "error", name, "crashed", ...
+    raw = verify.issue("matlab/+verify/+checks/" + name + ".m", [0 0], "error", name, "crashed", ...
         "Check threw " + string(err.identifier) + ": " + string(err.message) + ...
         " Fix the check or the input that triggers it.");
 end
 issues = verify.emptyIssues();
 for k = 1:numel(raw)
     one = raw(k);
-    issues(end + 1, 1) = verify.issue(verify.relPath(string(one.file)), double(one.line), ...
-        double(one.column), lower(string(one.severity)), name, string(one.id), string(one.message)); %#ok<AGROW>
+    issues(end + 1, 1) = verify.issue(verify.relPath(string(one.file)), [double(one.line) double(one.column)], ...
+        lower(string(one.severity)), name, string(one.id), string(one.message)); %#ok<AGROW>
 end
 end

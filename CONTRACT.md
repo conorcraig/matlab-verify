@@ -15,7 +15,18 @@ the runner or by checked code must exist in R2024a. No paid add-ons.
   - `severity` `"error"` or `"warning"` (anything else, e.g. `"info"`, is dropped),
   - `check` the check name, `id` a short stable id (e.g. `FCNLL`, `cycle`),
   - `message` must tell the reader how to fix it.
-- Helper: `verify.issue(file, line, col, severity, check, id, message)` builds one.
+- Helper: `verify.issue(file, [line col], severity, check, id, message)` builds one
+  (position is one argument so the helper stays within the 6-input lint limit).
+
+## Rules the runner holds itself to
+
+`just verify` (default target `matlab/` and `sample/`) must pass with no
+baselines, so runner code follows its own `types` and `naming` rules:
+input `arguments` blocks with class and size for every input, an
+`arguments (Output)` block when there are outputs, lowerCamelCase functions
+and variables. Exception: test methods of `matlab.unittest.TestCase`
+subclasses cannot have `arguments` blocks (MATLAB throws
+`MATLAB:unittest:TestCase:FunctionArgumentValidationNotSupported`).
 
 ## Runner
 
