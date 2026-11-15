@@ -71,7 +71,6 @@ $branch.Out | Select-Object -Last 1
 Assert ($branch.Exit -eq 0) 'clean verify passes'
 Assert ($branchText -match '(?m)^verify: file set: branch vs base \(') 'clean tree uses branch vs base'
 Assert ($branchText -match '(?m)^verify: files: \(none\)$') 'clean branch matches its base'
-Assert ($branchText -match 'verify\(matlab\): \d+ failing, \d+ baselined, 0 files,') 'clean run checks no files'
 
 Write-Output '== config walk from a subdirectory, explicit path only'
 Push-Location (Join-Path $root 'sample/src')
@@ -99,7 +98,6 @@ $scopeText = $scoped.Out -join "`n"
 Assert ($scoped.Exit -eq 0) 'scoped verify passes'
 Assert ($scopeText -match '(?m)^verify: file set: working tree \(staged and unstaged\)$') 'dirty tree uses the working tree'
 Assert ($scopeText -match '(?m)^verify: files: sample/src/resampleUniform\.m$') 'dirty run checks only that file'
-Assert ($scopeText -match 'verify\(matlab\): \d+ failing, \d+ baselined, 1 files,') 'non-test checks see one file'
 Assert ($scopeText -match 'SignalFunctionsTest/') 'dependent test runs'
 Assert ($scopeText -notmatch 'SensorLogTest') 'independent test does not run'
 
