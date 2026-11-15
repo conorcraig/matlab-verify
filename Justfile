@@ -7,17 +7,21 @@ matlab_checks := "parse lint compat complexity deps tests types naming"
 # Non-MATLAB checks: tools/checks/<name>.ps1, printing the same issue line format.
 external_checks := "style"
 
-verifier := "./tools/verify.ps1 -MatlabChecks '" + matlab_checks + "' -ExternalChecks '" + external_checks + "'"
+verifier := "'" + justfile_directory() + "/tools/verify.ps1' -MatlabChecks '" + matlab_checks + "' -ExternalChecks '" + external_checks + "'"
 
-# All checks, human-readable. Default target: matlab/ and sample/.
+# No target: git working tree, or this branch vs its base when the tree is clean.
+# Explicit paths: only those paths. Never the whole tree. See CONTRACT.md.
+[no-cd]
 verify *target:
     @{{verifier}} -Target '{{target}}'
 
 # Agent entry point: only issues (bounded by tools/summarize.ps1), then one summary line.
+[no-cd]
 verify-quiet *target:
     @{{verifier}} -Target '{{target}}' -Quiet
 
 # Remove fixed entries from baselines/*.txt. Never adds entries.
+[no-cd]
 update-baselines *target:
     @{{verifier}} -Target '{{target}}' -Update
 

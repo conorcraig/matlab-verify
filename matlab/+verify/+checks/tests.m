@@ -1,9 +1,9 @@
 function issues = tests(files, cfg)
-%TESTS Run class-based tests tagged cfg.tests.tag; JUnit XML to the report dir.
-%   Test files are the checked files whose classdef derives from
-%   matlab.unittest.TestCase. Uses testsuite + TestRunner (equivalent to
-%   runtests(..., Tag=tag)) so the JUnit plugin can be attached and the
-%   console output stays clean.
+%TESTS Run fast tests that cover FILES; JUnit XML goes to the report dir.
+%   Runs a selected file that is itself a test, plus tests whose direct
+%   requirements intersect FILES (see verify.dependentTests). The tag filter
+%   is cfg.tests.tag. testsuite + TestRunner (equivalent to
+%   runtests(..., Tag=tag)) keeps the JUnit plugin and a clean console.
 arguments
     files (:,1) string
     cfg (1,1) struct
@@ -12,14 +12,15 @@ arguments (Output)
     issues (:,1) struct
 end
 issues = verify.emptyIssues();
-testPattern = "^\s*classdef[^\n]*<\s*matlab\.unittest\.TestCase";
-isTest = arrayfun(@(f) ~isempty(regexp(fileread(verify.absPath(f)), testPattern, "once", "lineanchors")), files);
-testFiles = files(isTest);
+testFiles = verify.dependentTests(files);
 if isempty(testFiles)
+    fprintf("tests: ran (none)\n");
     return
 end
+verify.addSourcePaths(testFiles);
 suite = testsuite(cellstr(arrayfun(@verify.absPath, testFiles)), "Tag", cfg.tests.tag);
 if isempty(suite)
+    fprintf("tests: ran (none)\n");
     return
 end
 junit = string(fullfile(cfg.reportDir, "junit.xml"));
@@ -27,6 +28,7 @@ runner = matlab.unittest.TestRunner.withNoPlugins;
 runner.addPlugin(matlab.unittest.plugins.XMLPlugin.producingJUnitFormat(junit));
 runner.addPlugin(matlab.unittest.plugins.DiagnosticsRecordingPlugin);
 results = runner.run(suite);
+fprintf("tests: ran %s\n", strjoin(string({results.Name}), " "));
 for k = find([results.Failed])
     [file, lineNo, detail] = failureDetail(results(k), testFiles);
     msg = "Test '" + results(k).Name + "' failed: " + detail + ...

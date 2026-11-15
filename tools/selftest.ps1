@@ -59,10 +59,49 @@ try {
 }
 finally { Remove-Item $baseline -ErrorAction SilentlyContinue }
 
-Write-Output '== default target (matlab/ and sample/) passes'
-$clean = Invoke-Verify @('-Quiet')
+Write-Output '== matlab/ and sample/ pass'
+$clean = Invoke-Verify @('-Target', 'matlab sample', '-Quiet')
 $clean.Out | Select-Object -Last 1
-Assert ($clean.Exit -eq 0) 'default target passes'
+Assert ($clean.Exit -eq 0) 'matlab and sample pass'
+
+Write-Output '== clean tree uses the branch diff, not the whole tree'
+$branch = Invoke-Verify @('-Quiet')
+$branchText = $branch.Out -join "`n"
+$branch.Out | Select-Object -Last 1
+Assert ($branch.Exit -eq 0) 'clean verify passes'
+Assert ($branchText -match '(?m)^verify: file set: branch vs base \(') 'clean tree uses branch vs base'
+Assert ($branchText -match '(?m)^verify: files: \(none\)$') 'clean branch matches its base'
+Assert ($branchText -match 'verify\(matlab\): \d+ failing, \d+ baselined, 0 files,') 'clean run checks no files'
+
+Write-Output '== config walk from a subdirectory, explicit path only'
+Push-Location (Join-Path $root 'sample/src')
+try {
+    $fromSub = Invoke-Verify @('-Target', 'resampleUniform.m', '-Quiet')
+}
+finally { Pop-Location }
+$subText = $fromSub.Out -join "`n"
+Assert ($fromSub.Exit -eq 0) 'subdirectory verify passes'
+Assert ($subText -match '(?m)^verify: file set: explicit paths$') 'subdirectory run is explicit paths'
+Assert ($subText -match '(?m)^verify: files: sample/src/resampleUniform\.m$') 'subdirectory path is only that file'
+Assert ($subText -match 'SignalFunctionsTest/') 'subdirectory run executes the dependent test'
+Assert ($subText -notmatch 'SensorLogTest') 'subdirectory run skips the independent test'
+
+Write-Output '== dirty file: that file and its dependent tests only'
+$sampleFile = Join-Path $root 'sample/src/resampleUniform.m'
+$original = [IO.File]::ReadAllBytes($sampleFile)
+try {
+    $suffix = [Text.Encoding]::UTF8.GetBytes("`r`n% scope probe`r`n")
+    [IO.File]::WriteAllBytes($sampleFile, $original + $suffix)
+    $scoped = Invoke-Verify @('-Quiet')
+}
+finally { [IO.File]::WriteAllBytes($sampleFile, $original) }
+$scopeText = $scoped.Out -join "`n"
+Assert ($scoped.Exit -eq 0) 'scoped verify passes'
+Assert ($scopeText -match '(?m)^verify: file set: working tree \(staged and unstaged\)$') 'dirty tree uses the working tree'
+Assert ($scopeText -match '(?m)^verify: files: sample/src/resampleUniform\.m$') 'dirty run checks only that file'
+Assert ($scopeText -match 'verify\(matlab\): \d+ failing, \d+ baselined, 1 files,') 'non-test checks see one file'
+Assert ($scopeText -match 'SignalFunctionsTest/') 'dependent test runs'
+Assert ($scopeText -notmatch 'SensorLogTest') 'independent test does not run'
 
 if ($failures.Count) { Write-Output "selftest: FAIL ($($failures.Count))"; exit 1 }
 Write-Output 'selftest: PASS'
