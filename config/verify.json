@@ -1,0 +1,18 @@
+{
+  "lint": {
+    "maxFunctionLines": 75,
+    "maxNesting": 4,
+    "maxLineLength": 120,
+    "maxInputs": 6,
+    "maxOutputs": 4
+  },
+  "complexity": {
+    "max": 10
+  },
+  "deps": {
+    "allowedProducts": ["MATLAB"]
+  },
+  "tests": {
+    "tag": "fast"
+  }
+}
