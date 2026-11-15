@@ -7,8 +7,8 @@ end
 arguments (Output)
     issues (:,1) struct
 end
-issues = verify.codeAnalyzer(files, "factory", "parse", ...
-    @(~, ~) "Fix the syntax at this location; nothing else in the file can be checked until it parses.");
+advice = "Fix the syntax at this location; nothing else in the file can be checked until it parses.";
+issues = verify.codeAnalyzer(files, "factory", "parse", @(~, ~) advice);
 if ~isempty(issues)
     issues = issues([issues.severity] == "error");
 end

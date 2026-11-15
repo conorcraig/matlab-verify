@@ -47,12 +47,12 @@ for name = checkNames
     ran(end + 1) = name; %#ok<AGROW>
     if opts.Verbose
         fprintf("-- %-11s %3d issue(s), %d baselined, %5.1fs\n", name, numel(remaining), accepted, ...
-            toc(checkTime));
+                toc(checkTime));
     end
 end
 
 fprintf("verify(matlab): %d failing, %d baselined, %d files, checks [%s], %.1fs\n", ...
-    nFailing, nBaselined, numel(files), strjoin(ran, " "), toc(startTime));
+        nFailing, nBaselined, numel(files), strjoin(ran, " "), toc(startTime));
 if batchStartupOptionUsed && nFailing > 0
     exit(1);
 end

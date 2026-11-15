@@ -12,7 +12,7 @@ if numel(signal) < 3
     return
 end
 inner = 2:numel(signal) - 1;
-isPeak = signal(inner) > signal(inner - 1) & signal(inner) > signal(inner + 1) ...
-    & signal(inner) >= threshold;
+isLocalMax = signal(inner) > signal(inner - 1) & signal(inner) > signal(inner + 1);
+isPeak = isLocalMax & signal(inner) >= threshold;
 peakIndices = inner(isPeak)';
 end

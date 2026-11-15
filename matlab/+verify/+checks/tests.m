@@ -12,8 +12,8 @@ arguments (Output)
     issues (:,1) struct
 end
 issues = verify.emptyIssues();
-isTest = arrayfun(@(f) ~isempty(regexp(fileread(verify.absPath(f)), ...
-    "^\s*classdef[^\n]*<\s*matlab\.unittest\.TestCase", "once", "lineanchors")), files);
+testPattern = "^\s*classdef[^\n]*<\s*matlab\.unittest\.TestCase";
+isTest = arrayfun(@(f) ~isempty(regexp(fileread(verify.absPath(f)), testPattern, "once", "lineanchors")), files);
 testFiles = files(isTest);
 if isempty(testFiles)
     return
@@ -29,9 +29,9 @@ runner.addPlugin(matlab.unittest.plugins.DiagnosticsRecordingPlugin);
 results = runner.run(suite);
 for k = find([results.Failed])
     [file, line, detail] = failureDetail(results(k), testFiles);
-    issues(end + 1, 1) = verify.issue(file, [line 1], "error", "tests", "failed", ...
-        sprintf("Test '%s' failed: %s Fix the code under test or the test; details in %s.", ...
-        results(k).Name, detail, verify.relPath(junit))); %#ok<AGROW>
+    message = "Test '" + results(k).Name + "' failed: " + detail + ...
+        " Fix the code under test or the test; details in " + verify.relPath(junit) + ".";
+    issues(end + 1, 1) = verify.issue(file, [line 1], "error", "tests", "failed", message); %#ok<AGROW>
 end
 end
 
@@ -66,7 +66,7 @@ for s = 1:numel(stack)
     end
 end
 texts = string([{record.FrameworkDiagnosticResults.DiagnosticText}, ...
-    {record.TestDiagnosticResults.DiagnosticText}, {record.Report}]);
+                {record.TestDiagnosticResults.DiagnosticText}, {record.Report}]);
 texts = texts(strip(texts) ~= "");
 if ~isempty(texts)
     detail = strjoin(strip(splitlines(texts(1))), " ");

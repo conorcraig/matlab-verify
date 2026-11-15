@@ -13,5 +13,5 @@ arguments (Output)
     s (1,1) struct
 end
 s = struct('file', file, 'line', position(1), 'column', position(2), ...
-    'severity', severity, 'check', check, 'id', id, 'message', message);
+           'severity', severity, 'check', check, 'id', id, 'message', message);
 end

@@ -42,6 +42,6 @@ if mode == "update" && ~isempty(stale)
 end
 if mode == "update" && ~isempty(remaining)
     fprintf("baseline %s: refusing to add %d new issue(s); fix them instead\n", ...
-        verify.relPath(file), numel(remaining));
+            verify.relPath(file), numel(remaining));
 end
 end

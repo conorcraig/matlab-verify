@@ -16,13 +16,14 @@ checks = struct();
 for release = string(fieldnames(spec.banned))'
     names = string(spec.banned.(release));
     if ~isempty(names)
-        checks.("compat" + release) = struct("rule", struct("template", "functionCall", "functionNames", names), ...
-            "severity", "error", "messageText", "Added in " + release + ".", "enabled", true);
+        rule = struct("template", "functionCall", "functionNames", names);
+        checks.("compat" + release) = struct("rule", rule, "severity", "error", ...
+                                             "messageText", "Added in " + release + ".", "enabled", true);
     end
 end
 config = struct("name", "matlab-verify compat", "baseConfiguration", "factory", "checks", checks);
 configFile = string(fullfile(cfg.reportDir, "compat.codeAnalyzerConfiguration.json"));
-writelines(jsonencode(config, PrettyPrint=true), configFile);
+writelines(jsonencode(config, PrettyPrint = true), configFile);
 
 found = verify.codeAnalyzer(files, configFile, "compat");
 issues = verify.emptyIssues();
@@ -30,7 +31,7 @@ for k = 1:numel(found)
     one = found(k);
     if startsWith(one.id, "compat")
         one.message = compatMessage(identifierAt(one.file, one.line, one.column), ...
-            extractAfter(one.id, "compat"), spec);
+                                    extractAfter(one.id, "compat"), spec);
         issues(end + 1, 1) = one; %#ok<AGROW>
     end
 end
@@ -50,7 +51,7 @@ if name ~= "" && isfield(spec.alternatives, name)
     advice = advice + ": " + spec.alternatives.(name);
 end
 message = sprintf("'%s' was added in %s but the minimum supported release is %s. %s.", ...
-    name, release, spec.minimumRelease, advice);
+                  name, release, spec.minimumRelease, advice);
 end
 
 function name = identifierAt(file, line, column)

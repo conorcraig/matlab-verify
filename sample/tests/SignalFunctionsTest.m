@@ -2,6 +2,7 @@ classdef (TestTags = {'fast'}) SignalFunctionsTest < matlab.unittest.TestCase
     %SIGNALFUNCTIONSTEST Unit tests for the signal helper functions.
 
     methods (Test)
+
         function movingAverageUsesTrailingWindow(testCase)
             testCase.verifyEqual(movingAverage([3; 6; 9; 12], 2), [3; 4.5; 7.5; 10.5]);
         end
@@ -12,8 +13,8 @@ classdef (TestTags = {'fast'}) SignalFunctionsTest < matlab.unittest.TestCase
 
         function normalizeSignalHasUnitSpread(testCase)
             normalized = normalizeSignal([1; 2; 3; 4]);
-            testCase.verifyEqual(std(normalized), 1, AbsTol=1e-12);
-            testCase.verifyEqual(mean(normalized), 0, AbsTol=1e-12);
+            testCase.verifyEqual(std(normalized), 1, AbsTol = 1e-12);
+            testCase.verifyEqual(mean(normalized), 0, AbsTol = 1e-12);
         end
 
         function detectPeaksFindsLocalMaxima(testCase)
@@ -29,5 +30,6 @@ classdef (TestTags = {'fast'}) SignalFunctionsTest < matlab.unittest.TestCase
             testCase.verifyEqual(times, [0; 1; 2]);
             testCase.verifyEqual(values, [0; 2; 4]);
         end
+
     end
 end

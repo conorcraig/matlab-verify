@@ -20,10 +20,10 @@ for f = files'
             continue
         end
         message = sprintf("Function '%s' has cyclomatic complexity %s (limit %d). " + ...
-            "Split branches into helper functions or replace if/elseif chains with a lookup.", ...
-            tok{1}, tok{2}, limit);
+                          "Split branches into helper functions or replace if/elseif chains with a lookup.", ...
+                          tok{1}, tok{2}, limit);
         issues(end + 1, 1) = verify.issue(f, [info(k).line info(k).column(1)], "error", ...
-            "complexity", "CABE", message); %#ok<AGROW>
+                                          "complexity", "CABE", message); %#ok<AGROW>
     end
 end
 end

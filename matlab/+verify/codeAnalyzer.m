@@ -14,7 +14,7 @@ arguments (Output)
 end
 issues = verify.emptyIssues();
 for f = files'
-    result = codeIssues(verify.absPath(f), CodeAnalyzerConfiguration=configuration);
+    result = codeIssues(verify.absPath(f), CodeAnalyzerConfiguration = configuration);
     found = result.Issues;
     for k = 1:height(found)
         severity = string(found.Severity(k));
@@ -24,7 +24,7 @@ for f = files'
         id = string(found.CheckID(k));
         message = strip(string(found.Description(k)) + " " + hint(id, string(found.Description(k))));
         issues(end + 1, 1) = verify.issue(f, [found.LineStart(k) found.ColumnStart(k)], ...
-            severity, check, id, message); %#ok<AGROW>
+                                          severity, check, id, message); %#ok<AGROW>
     end
 end
 end

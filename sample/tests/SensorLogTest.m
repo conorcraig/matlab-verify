@@ -2,6 +2,7 @@ classdef (TestTags = {'fast'}) SensorLogTest < matlab.unittest.TestCase
     %SENSORLOGTEST Unit tests for SensorLog.
 
     methods (Test)
+
         function startsEmpty(testCase)
             sensorLog = SensorLog("pump");
             testCase.verifyEqual(sensorLog.readingCount(), 0);
@@ -23,5 +24,6 @@ classdef (TestTags = {'fast'}) SensorLogTest < matlab.unittest.TestCase
             testCase.verifyEqual(summary.peaks, 3);
             testCase.verifyEqual(summary.name, "pump");
         end
+
     end
 end

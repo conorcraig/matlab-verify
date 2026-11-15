@@ -15,15 +15,15 @@ absFiles = lower(arrayfun(@verify.absPath, files));
 edges = zeros(0, 2);
 issues = verify.emptyIssues();
 for k = 1:numel(files)
-    [required, products] = matlab.codetools.requiredFilesAndProducts(char(verify.absPath(files(k))), "toponly");
+    filePath = char(verify.absPath(files(k)));
+    [required, products] = matlab.codetools.requiredFilesAndProducts(filePath, "toponly");
     [isLocal, target] = ismember(lower(string(required)), absFiles);
     target = target(isLocal & target ~= k);
     edges = [edges; repmat(k, numel(target), 1), target(:)]; %#ok<AGROW>
     for name = reshape(setdiff(string({products.Name}), allowed), 1, [])
-        issues(end + 1, 1) = verify.issue(files(k), [1 1], "error", "deps", "product", ...
-            sprintf("Requires '%s', which is not in deps.allowedProducts (%s). " + ...
-            "Use base MATLAB functions instead, or add the product to config/verify.json.", ...
-            name, strjoin(allowed, ", "))); %#ok<AGROW>
+        message = "Requires '" + name + "', which is not in deps.allowedProducts (" + strjoin(allowed, ", ") + ...
+            "). Use base MATLAB functions instead, or add the product to config/verify.json.";
+        issues(end + 1, 1) = verify.issue(files(k), [1 1], "error", "deps", "product", message); %#ok<AGROW>
     end
 end
 issues = [issues; cycleIssues(files, edges); unresolvedIssues(files)];
@@ -46,10 +46,10 @@ for b = unique(bins)
         continue
     end
     loop = strjoin(files(members), " -> ") + " -> " + files(members(1));
+    message = "File is in a dependency cycle (" + loop + "). Break it by moving the shared code " + ...
+        "into a separate function that both files call.";
     for m = members
-        issues(end + 1, 1) = verify.issue(files(m), [1 1], "error", "deps", "cycle", ...
-            "File is in a dependency cycle (" + loop + "). Break it by moving the shared code " + ...
-            "into a separate function that both files call."); %#ok<AGROW>
+        issues(end + 1, 1) = verify.issue(files(m), [1 1], "error", "deps", "cycle", message); %#ok<AGROW>
     end
 end
 end
@@ -76,9 +76,10 @@ for k = 1:numel(files)
     cols = charno(calls);
     for c = 1:numel(names)
         if ~ismember(names(c), defined) && isempty(which(names(c), "-all"))
+            message = "Call to '" + names(c) + "' does not resolve to any function on the path or in the " + ...
+                "checked files. Fix the name, add the defining file, or add its folder to the path.";
             issues(end + 1, 1) = verify.issue(files(k), [lines(c) cols(c)], "error", "deps", "unresolved", ...
-                sprintf("Call to '%s' does not resolve to any function on the path or in the checked files. " + ...
-                "Fix the name, add the defining file, or add its folder to the path.", names(c))); %#ok<AGROW>
+                                              message); %#ok<AGROW>
         end
     end
 end

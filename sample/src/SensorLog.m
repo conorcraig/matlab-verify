@@ -11,6 +11,7 @@ classdef SensorLog < handle
     end
 
     methods
+
         function obj = SensorLog(name)
             arguments
                 name (1,1) string {mustBeNonzeroLengthText}
@@ -48,8 +49,9 @@ classdef SensorLog < handle
             arguments (Output)
                 summary (1,1) struct
             end
-            summary = summarizeSignal(clampValues(obj.Readings, -1e6, 1e6), Window=window);
+            summary = summarizeSignal(clampValues(obj.Readings, -1e6, 1e6), Window = window);
             summary.name = obj.Name;
         end
+
     end
 end

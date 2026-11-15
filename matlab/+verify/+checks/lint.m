@@ -11,12 +11,12 @@ arguments (Output)
     issues (:,1) struct
 end
 settings = cfg.lint;
-limits = struct( ...
-    "FCNLL", struct("limit", settings.maxFunctionLines, "hint", "Split the function into smaller helpers."), ...
-    "MNCSN", struct("limit", settings.maxNesting, "hint", "Reduce nesting with early returns or a helper."), ...
-    "LLMNC", struct("limit", settings.maxLineLength, "hint", "Wrap the line with ... continuation."), ...
-    "FCNIL", struct("limit", settings.maxInputs, "hint", "Group related inputs into a struct or options."), ...
-    "FCNOL", struct("limit", settings.maxOutputs, "hint", "Return a struct instead of many outputs."));
+limits = struct();
+limits.FCNLL = struct("limit", settings.maxFunctionLines, "hint", "Split the function into smaller helpers.");
+limits.MNCSN = struct("limit", settings.maxNesting, "hint", "Reduce nesting with early returns or a helper.");
+limits.LLMNC = struct("limit", settings.maxLineLength, "hint", "Wrap the line with ... continuation.");
+limits.FCNIL = struct("limit", settings.maxInputs, "hint", "Group related inputs into a struct or options.");
+limits.FCNOL = struct("limit", settings.maxOutputs, "hint", "Return a struct instead of many outputs.");
 limitIds = string(fieldnames(limits));
 checks = struct();
 for id = limitIds'
@@ -24,7 +24,7 @@ for id = limitIds'
 end
 config = struct("name", "matlab-verify lint", "baseConfiguration", "factory", "checks", checks);
 configFile = string(fullfile(cfg.reportDir, "lint.codeAnalyzerConfiguration.json"));
-writelines(jsonencode(config, PrettyPrint=true), configFile);
+writelines(jsonencode(config, PrettyPrint = true), configFile);
 
 issues = verify.codeAnalyzer(files, configFile, "lint", @(id, ~) lintHint(id, limits));
 if ~isempty(issues)
