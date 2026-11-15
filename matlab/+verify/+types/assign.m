@@ -1,21 +1,21 @@
-function state = assign(eq, state, ctx)
+function state = assign(assignment, state, ctx)
 %ASSIGN Abstractly execute one assignment (EQUALS node).
 %   x = e binds x; [a, b] = f(...) asks f for two outputs; indexed or field
 %   assignment keeps the variable's class and forgets its shape.
 arguments (Input)
-    eq (1,1) mtree
+    assignment (1,1) mtree
     state (1,1) struct
     ctx (1,1) struct
 end
 arguments (Output)
     state (1,1) struct
 end
-lhs = eq.Left;
+lhs = assignment.Left;
 targets = {lhs};
 if iskind(lhs, "LB")
     targets = verify.mtree.items(lhs.Arg);
 end
-[outs, state] = rhsTypes(eq.Right, numel(targets), state, ctx);
+[outs, state] = rhsTypes(assignment.Right, numel(targets), state, ctx);
 for k = 1:numel(targets)
     state = bind(targets{k}, outs{min(k, numel(outs))}, state, ctx);
 end

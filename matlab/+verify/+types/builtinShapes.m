@@ -15,7 +15,7 @@ arguments (Output)
 end
 persistent rules
 if isempty(rules)
-    rules = struct("fill", @fill, "size", @sizeOf, "count", @countOf, "toString", @toString, ...
+    rules = struct("fill", @fillShape, "size", @sizeOf, "count", @countOf, "toString", @toString, ...
         "toChar", @toChar, "cast", @castTo, "reduce", @reduce, "same", @same, "text", @textOf, ...
         "match", @match, "reshape", @reshapeOf, "loose", @loose, "split", @splitOf);
 end
@@ -29,7 +29,7 @@ end
 outs = rules.(rule)(cls, args, nodes, nout);
 end
 
-function outs = fill(cls, args, nodes, ~)
+function outs = fillShape(cls, args, nodes, ~)
 % zeros(n), zeros(m,n,...), zeros(size(x)), zeros(..., "int32"), zeros(..., "like", x)
 arguments (Input)
     cls (1,1) string

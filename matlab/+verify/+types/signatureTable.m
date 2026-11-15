@@ -1,7 +1,8 @@
 function [shared, locals] = signatureTable(units)
 %SIGNATURETABLE Callable signatures across the checked files.
 %   shared: containers.Map of primary functions and class constructors,
-%   keyed by file name and by package-qualified name (pkg.fn).
+%   keyed by the name callers must use: the file name, package-qualified
+%   (pkg.fn) for files inside +pkg folders.
 %   locals: one containers.Map per unit with that file's own functions
 %   (local, nested and methods), which shadow global names.
 arguments (Input)
@@ -26,7 +27,6 @@ for k = 1:numel(units)
     end
     [name, sig] = publicEntry(u);
     if name ~= ""
-        shared(char(name)) = sig;
         shared(char(qualified(u.file, name))) = sig;
     end
 end
