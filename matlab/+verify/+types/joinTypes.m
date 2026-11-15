@@ -1,5 +1,5 @@
-function t = join(a, b)
-%JOIN Least upper bound of two abstract values (control-flow merge).
+function t = joinTypes(a, b)
+%JOINTYPES Least upper bound of two abstract values (control-flow merge).
 %   Equal classes are kept, different classes go to top. Shapes of equal rank
 %   are joined per dimension (equal kept, different -> "?"); different ranks
 %   go to top. Lattice from Mc2For (github.com/Sable/Mc2For, Apache-2.0).

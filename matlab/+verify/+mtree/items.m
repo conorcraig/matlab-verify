@@ -10,9 +10,10 @@ out = cell(1, 0);
 if isnull(first)
     return
 end
-ix = indices(List(first));
+chain = List(first);
+ix = indices(chain);
 out = cell(1, numel(ix));
 for k = 1:numel(ix)
-    out{k} = select(first, ix(k));
+    out{k} = select(chain, ix(k));
 end
 end
