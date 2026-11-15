@@ -22,7 +22,8 @@ for k = 1:numel(raw)
     one = raw(k);
     position = [double(one.line) double(one.column)];
     severity = lower(string(one.severity));
+    message = strjoin(strip(splitlines(string(one.message))), " ");
     issues(end + 1, 1) = verify.issue(verify.relPath(string(one.file)), position, severity, name, ...
-                                      string(one.id), string(one.message)); %#ok<AGROW>
+                                      string(one.id), message); %#ok<AGROW>
 end
 end

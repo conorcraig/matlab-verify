@@ -69,7 +69,7 @@ texts = string([{record.FrameworkDiagnosticResults.DiagnosticText}, ...
                 {record.TestDiagnosticResults.DiagnosticText}, {record.Report}]);
 texts = texts(strip(texts) ~= "");
 if ~isempty(texts)
-    detail = strjoin(strip(splitlines(texts(1))), " ");
-    detail = extractBefore(detail + " ", min(strlength(detail), 200) + 1);
+    detail = strip(regexprep(regexprep(texts(1), "_{3,}", ""), "\s+", " "));
+    detail = extractBefore(detail + " ", min(strlength(detail), 240) + 1);
 end
 end

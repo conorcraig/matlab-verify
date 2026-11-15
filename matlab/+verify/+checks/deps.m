@@ -2,7 +2,8 @@ function issues = deps(files, cfg)
 %DEPS Dependency rules: no cycles, no unresolved calls, allowed products only.
 %   Edges come from matlab.codetools.requiredFilesAndProducts(file, 'toponly').
 %   Unresolved calls are plain calls (mtree CALL nodes) that are neither
-%   defined in any checked file nor found on the path.
+%   defined in any checked file nor found on the path. Files with syntax
+%   errors are skipped; the parse check reports them.
 arguments
     files (:,1) string
     cfg (1,1) struct
@@ -16,7 +17,14 @@ edges = zeros(0, 2);
 issues = verify.emptyIssues();
 for k = 1:numel(files)
     filePath = char(verify.absPath(files(k)));
-    [required, products] = matlab.codetools.requiredFilesAndProducts(filePath, "toponly");
+    try
+        [required, products] = matlab.codetools.requiredFilesAndProducts(filePath, "toponly");
+    catch err
+        if err.identifier == "MATLAB:depfun:req:BadSyntax"
+            continue
+        end
+        rethrow(err);
+    end
     [isLocal, target] = ismember(lower(string(required)), absFiles);
     target = target(isLocal & target ~= k);
     edges = [edges; repmat(k, numel(target), 1), target(:)]; %#ok<AGROW>
